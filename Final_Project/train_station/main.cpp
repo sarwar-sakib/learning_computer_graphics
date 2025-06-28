@@ -9,6 +9,8 @@ GLfloat planeX = -2.0f;
 GLfloat planeY = -0.5f;
 GLfloat cloudX = 0.0f;
 GLfloat trainSpeed = 0.008f;  // Default speed
+float humanOffsetX = 0.0f;
+
 
 GLfloat hourAngle = 0.0f;
 GLfloat minuteAngle = 0.0f;
@@ -435,6 +437,82 @@ void tree2() {
     drawCircle(0.16f, 0.32f, 0.04f);  // bottom
     drawCircle(0.16f, 0.36f, 0.035f); // middle
     drawCircle(0.16f, 0.40f, 0.03f);  // top
+
+    glPopMatrix();
+}
+
+void human3(GLfloat bodyR, GLfloat bodyG, GLfloat bodyB) {
+    ///head
+    glPushMatrix();
+    glTranslatef(-0.02f, 0.02f, 0.00f);
+    glScalef(0.90f, 0.90f, 0.00f);
+
+    GLfloat x = 0.30f, y = 0.28f, radius = 0.01f;
+    int triangleAmount = 100;
+    GLfloat twicePi = 1.00f * PI;
+
+    glColor3f(0.00f, 0.00f, 0.00f);
+    glBegin(GL_TRIANGLE_FAN);
+        glVertex2f(x, y);
+        for (int i = 0; i <= triangleAmount; i++) {
+            glVertex2f(
+                x + (radius * cos(i * twicePi / triangleAmount)),
+                y + (radius * sin(i * twicePi / triangleAmount))
+            );
+        }
+    glEnd();
+
+    x = 0.30f; y = 0.28f; radius = 0.01f;
+    triangleAmount = 100;
+    twicePi = -1.00f * PI;
+
+    glColor3f(0.70f, 0.45f, 0.24f);
+    glBegin(GL_TRIANGLE_FAN);
+        glVertex2f(x, y);
+        for (int i = 0; i <= triangleAmount; i++) {
+            glVertex2f(
+                x + (radius * cos(i * twicePi / triangleAmount)),
+                y + (radius * sin(i * twicePi / triangleAmount))
+            );
+        }
+    glEnd();
+
+    ///body
+    glBegin(GL_QUADS);
+    glColor3f(bodyR, bodyG, bodyB);
+        glVertex2f(0.31f, 0.273f);
+        glVertex2f(0.29f, 0.273f);
+        glVertex2f(0.29f, 0.25f);
+        glVertex2f(0.31f, 0.25f);
+    glEnd();
+
+
+    ///legs
+    glBegin(GL_QUADS);
+        glColor3f(0.00f, 0.00f, 0.00f);
+        glVertex2f(0.29f, 0.25f);
+        glVertex2f(0.29f, 0.23f);
+        glVertex2f(0.296f, 0.23f);
+        glVertex2f(0.30f, 0.25f);
+
+        glVertex2f(0.30f, 0.25f);
+        glVertex2f(0.304f, 0.23f);
+        glVertex2f(0.31f, 0.23f);
+        glVertex2f(0.31f, 0.25f);
+    glEnd();
+
+    glBegin(GL_QUADS);
+        glColor3f(0.00f, 0.00f, 0.00f);
+        glVertex2f(0.29f, 0.248f);
+        glVertex2f(0.29f, 0.232f);
+        glVertex2f(0.296f, 0.232f);
+        glVertex2f(0.30f, 0.25f);
+
+        glVertex2f(0.30f, 0.25f);
+        glVertex2f(0.304f, 0.232f);
+        glVertex2f(0.31f, 0.232f);
+        glVertex2f(0.31f, 0.25f);
+    glEnd();
 
     glPopMatrix();
 }
@@ -1472,13 +1550,13 @@ glPopMatrix();
 
                     glPushMatrix();
     glScalef(2.0f, 2.0f, 2.0f);
-        glTranslatef(-0.3f, -0.62f, 0.0f);
+        glTranslatef(-0.3f, -0.68f, 0.0f);
         human2(0.00f, 0.70f, 0.51f);
     glPopMatrix();
 
             glPushMatrix();
     glScalef(2.0f, 2.0f, 2.0f);
-        glTranslatef(-0.25f, -0.63f, 0.0f);
+        glTranslatef(-0.25f, -0.70f, 0.0f);
         human2(0.00f, 0.70f, 0.51f);
     glPopMatrix();
 
@@ -1487,6 +1565,30 @@ glPopMatrix();
         glTranslatef(0.15f, -0.68f, 0.0f);
         human2(0.60f, 0.0f, 0.5f);
     glPopMatrix();
+    ///human 3
+glPushMatrix();
+    glTranslatef(-humanOffsetX, 0.0f, 0.0f); // Move along X
+    glScalef(2.0f, 2.0f, 2.0f);
+    glTranslatef(-0.1f, -0.60f, 0.0f);
+    human3(0.60f, 0.0f, 0.5f);
+glPopMatrix();
+
+glPushMatrix();
+    glTranslatef(humanOffsetX, 0.0f, 0.0f); // Move along X
+    glScalef(2.0f, 2.0f, 2.0f);
+    glTranslatef(-0.3f, -0.62f, 0.0f);
+    human3(0.00f, 0.70f, 0.51f);
+glPopMatrix();
+
+glPushMatrix();
+    glTranslatef(humanOffsetX, 0.0f, 0.0f); // Move along X
+    glScalef(2.0f, 2.0f, 2.0f);
+    glTranslatef(-0.25f, -0.63f, 0.0f);
+    human3(0.00f, 0.70f, 0.51f);
+glPopMatrix();
+
+
+
 
 ///seats 2
         glPushMatrix();
@@ -2192,6 +2294,12 @@ if (cloudX < -1.5f) {
     if (secondAngle >= 360.0f) secondAngle -= 360.0f;
     if (minuteAngle >= 360.0f) minuteAngle -= 360.0f;
     if (hourAngle >= 360.0f) hourAngle -= 360.0f;
+
+     humanOffsetX += 0.001f; // Adjust speed as needed
+
+    if (humanOffsetX > 1.5f) { // Reset or limit
+        humanOffsetX = -1.0f;
+    }
 
 
     glutPostRedisplay(); // Redraw the scene
